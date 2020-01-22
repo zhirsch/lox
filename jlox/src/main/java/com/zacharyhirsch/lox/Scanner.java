@@ -2,9 +2,17 @@ package com.zacharyhirsch.lox;
 
 import com.google.common.collect.ImmutableList;
 
-public class Scanner {
+import java.util.ArrayList;
+import java.util.List;
 
-  public Scanner(String source) {}
+final class Scanner {
+
+  private final String source;
+  private final List<Token> tokens = new ArrayList<>();
+
+  public Scanner(String source) {
+    this.source = source;
+  }
 
   public ImmutableList<Token> scanTokens() {
     return null;
