@@ -117,6 +117,13 @@ final class Scanner {
     return true;
   }
 
+  private char peek() {
+    if (isAtEnd()) {
+      return '\0';
+    }
+    return source.charAt(current);
+  }
+
   private char advance() {
     current++;
     return source.charAt(current - 1);
