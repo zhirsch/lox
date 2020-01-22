@@ -1,31 +1,71 @@
 package com.zacharyhirsch.lox;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static com.zacharyhirsch.lox.TokenType.AND;
 import static com.zacharyhirsch.lox.TokenType.BANG;
 import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.CLASS;
 import static com.zacharyhirsch.lox.TokenType.COMMA;
 import static com.zacharyhirsch.lox.TokenType.DOT;
+import static com.zacharyhirsch.lox.TokenType.ELSE;
 import static com.zacharyhirsch.lox.TokenType.EOF;
 import static com.zacharyhirsch.lox.TokenType.EQUAL;
 import static com.zacharyhirsch.lox.TokenType.EQUAL_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.FALSE;
+import static com.zacharyhirsch.lox.TokenType.FOR;
+import static com.zacharyhirsch.lox.TokenType.FUN;
 import static com.zacharyhirsch.lox.TokenType.GREATER_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.IDENTIFIER;
+import static com.zacharyhirsch.lox.TokenType.IF;
 import static com.zacharyhirsch.lox.TokenType.LEFT_BRACE;
 import static com.zacharyhirsch.lox.TokenType.LEFT_PAREN;
 import static com.zacharyhirsch.lox.TokenType.LESS_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.MINUS;
+import static com.zacharyhirsch.lox.TokenType.NIL;
 import static com.zacharyhirsch.lox.TokenType.NUMBER;
+import static com.zacharyhirsch.lox.TokenType.OR;
 import static com.zacharyhirsch.lox.TokenType.PLUS;
+import static com.zacharyhirsch.lox.TokenType.PRINT;
+import static com.zacharyhirsch.lox.TokenType.RETURN;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_BRACE;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_PAREN;
 import static com.zacharyhirsch.lox.TokenType.SEMICOLON;
 import static com.zacharyhirsch.lox.TokenType.SLASH;
 import static com.zacharyhirsch.lox.TokenType.STAR;
 import static com.zacharyhirsch.lox.TokenType.STRING;
+import static com.zacharyhirsch.lox.TokenType.SUPER;
+import static com.zacharyhirsch.lox.TokenType.THIS;
+import static com.zacharyhirsch.lox.TokenType.TRUE;
+import static com.zacharyhirsch.lox.TokenType.VAR;
+import static com.zacharyhirsch.lox.TokenType.WHILE;
 
 final class Scanner {
+
+  private static final Map<String, TokenType> KEYWORDS;
+
+  static {
+    KEYWORDS = new HashMap<>();
+    KEYWORDS.put("and", AND);
+    KEYWORDS.put("class", CLASS);
+    KEYWORDS.put("else", ELSE);
+    KEYWORDS.put("false", FALSE);
+    KEYWORDS.put("for", FOR);
+    KEYWORDS.put("fun", FUN);
+    KEYWORDS.put("if", IF);
+    KEYWORDS.put("nil", NIL);
+    KEYWORDS.put("or", OR);
+    KEYWORDS.put("print", PRINT);
+    KEYWORDS.put("return", RETURN);
+    KEYWORDS.put("super", SUPER);
+    KEYWORDS.put("this", THIS);
+    KEYWORDS.put("true", TRUE);
+    KEYWORDS.put("var", VAR);
+    KEYWORDS.put("while", WHILE);
+  }
 
   private final String source;
   private final List<Token> tokens = new ArrayList<>();
@@ -132,7 +172,12 @@ final class Scanner {
     while (isAlphaNumeric(peek())) {
       advance();
     }
-    addToken(IDENTIFIER);
+    String text = source.substring(start, current);
+    TokenType type = KEYWORDS.get(text);
+    if (type == null) {
+      type = IDENTIFIER;
+    }
+    addToken(type);
   }
 
   private void number() {
