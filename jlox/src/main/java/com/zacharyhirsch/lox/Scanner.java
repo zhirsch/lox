@@ -54,6 +54,20 @@ final class Scanner {
     }
   }
 
+  private char advance() {
+    current++;
+    return source.charAt(current - 1);
+  }
+
+  private void addToken(TokenType type) {
+    addToken(type, null);
+  }
+
+  private void addToken(TokenType type, Object literal) {
+    String text = source.substring(start, current);
+    tokens.add(new Token(type, text, literal, line));
+  }
+
   private boolean isAtEnd() {
     return current >= source.length();
   }
