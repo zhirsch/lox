@@ -1,11 +1,11 @@
 package com.zacharyhirsch.lox;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import static com.zacharyhirsch.lox.LineReadingIterator.readLines;
 
 final class Lox {
 
@@ -30,13 +30,9 @@ final class Lox {
     }
   }
 
-  private static void runPrompt() throws IOException {
-    InputStreamReader input = new InputStreamReader(System.in);
-    BufferedReader reader = new BufferedReader(input);
-
-    for (; ; ) {
-      System.out.print("> ");
-      run(reader.readLine());
+  private static void runPrompt() {
+    for (String line : readLines(System.in)) {
+      run(line);
       hadError = false;
     }
   }
