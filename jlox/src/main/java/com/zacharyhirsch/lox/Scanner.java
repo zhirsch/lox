@@ -3,11 +3,17 @@ package com.zacharyhirsch.lox;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.zacharyhirsch.lox.TokenType.BANG;
+import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.COMMA;
 import static com.zacharyhirsch.lox.TokenType.DOT;
 import static com.zacharyhirsch.lox.TokenType.EOF;
+import static com.zacharyhirsch.lox.TokenType.EQUAL;
+import static com.zacharyhirsch.lox.TokenType.EQUAL_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.GREATER_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.LEFT_BRACE;
 import static com.zacharyhirsch.lox.TokenType.LEFT_PAREN;
+import static com.zacharyhirsch.lox.TokenType.LESS_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.MINUS;
 import static com.zacharyhirsch.lox.TokenType.PLUS;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_BRACE;
@@ -70,6 +76,18 @@ final class Scanner {
         break;
       case '*':
         addToken(STAR);
+        break;
+      case '!':
+        addToken(match('=') ? BANG_EQUAL : BANG);
+        break;
+      case '=':
+        addToken(match('=') ? EQUAL_EQUAL : EQUAL);
+        break;
+      case '<':
+        addToken(match('=') ? LESS_EQUAL : EQUAL);
+        break;
+      case '>':
+        addToken(match('=') ? GREATER_EQUAL : EQUAL);
         break;
 
       default:
