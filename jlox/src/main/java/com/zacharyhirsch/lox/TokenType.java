@@ -1,6 +1,6 @@
 package com.zacharyhirsch.lox;
 
-public enum TokenType {
+enum TokenType {
     LEFT_PAREN,
     RIGHT_PAREN,
     LEFT_BRACE,
