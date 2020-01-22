@@ -18,11 +18,13 @@ import static com.zacharyhirsch.lox.TokenType.EQUAL_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.FALSE;
 import static com.zacharyhirsch.lox.TokenType.FOR;
 import static com.zacharyhirsch.lox.TokenType.FUN;
+import static com.zacharyhirsch.lox.TokenType.GREATER;
 import static com.zacharyhirsch.lox.TokenType.GREATER_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.IDENTIFIER;
 import static com.zacharyhirsch.lox.TokenType.IF;
 import static com.zacharyhirsch.lox.TokenType.LEFT_BRACE;
 import static com.zacharyhirsch.lox.TokenType.LEFT_PAREN;
+import static com.zacharyhirsch.lox.TokenType.LESS;
 import static com.zacharyhirsch.lox.TokenType.LESS_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.MINUS;
 import static com.zacharyhirsch.lox.TokenType.NIL;
@@ -128,10 +130,10 @@ final class Scanner {
         addToken(match('=') ? EQUAL_EQUAL : EQUAL);
         break;
       case '<':
-        addToken(match('=') ? LESS_EQUAL : EQUAL);
+        addToken(match('=') ? LESS_EQUAL : LESS);
         break;
       case '>':
-        addToken(match('=') ? GREATER_EQUAL : EQUAL);
+        addToken(match('=') ? GREATER_EQUAL : GREATER);
         break;
       case '/':
         if (match('/')) {
