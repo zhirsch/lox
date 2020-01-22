@@ -1,9 +1,9 @@
 package com.zacharyhirsch.lox;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.zacharyhirsch.lox.TokenType.EOF;
 
 final class Scanner {
 
@@ -14,7 +14,13 @@ final class Scanner {
     this.source = source;
   }
 
-  public ImmutableList<Token> scanTokens() {
-    return null;
+  List<Token> scanTokens() {
+    while (!isAtEnd()) {
+      start = current;
+      scanToken();
+    }
+
+    tokens.add(new Token(EOF, "", null, line));
+    return tokens;
   }
 }
