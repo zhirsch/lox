@@ -19,6 +19,7 @@ import static com.zacharyhirsch.lox.TokenType.PLUS;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_BRACE;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_PAREN;
 import static com.zacharyhirsch.lox.TokenType.SEMICOLON;
+import static com.zacharyhirsch.lox.TokenType.SLASH;
 import static com.zacharyhirsch.lox.TokenType.STAR;
 
 final class Scanner {
@@ -88,6 +89,15 @@ final class Scanner {
         break;
       case '>':
         addToken(match('=') ? GREATER_EQUAL : EQUAL);
+        break;
+      case '/':
+        if (match('/')) {
+          while (peek() != '\n' && !isAtEnd()) {
+            advance();
+          }
+        } else {
+          addToken(SLASH);
+        }
         break;
 
       default:
