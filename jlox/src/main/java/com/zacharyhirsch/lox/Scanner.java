@@ -15,12 +15,14 @@ import static com.zacharyhirsch.lox.TokenType.LEFT_BRACE;
 import static com.zacharyhirsch.lox.TokenType.LEFT_PAREN;
 import static com.zacharyhirsch.lox.TokenType.LESS_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.MINUS;
+import static com.zacharyhirsch.lox.TokenType.NUMBER;
 import static com.zacharyhirsch.lox.TokenType.PLUS;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_BRACE;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_PAREN;
 import static com.zacharyhirsch.lox.TokenType.SEMICOLON;
 import static com.zacharyhirsch.lox.TokenType.SLASH;
 import static com.zacharyhirsch.lox.TokenType.STAR;
+import static com.zacharyhirsch.lox.TokenType.STRING;
 
 final class Scanner {
 
@@ -109,10 +111,57 @@ final class Scanner {
         line++;
         break;
 
+      case '"':
+        string();
+        break;
+
       default:
-        Lox.error(line, "Unexpected character.");
+        if (isDigit(c)) {
+          number();
+        } else {
+          Lox.error(line, "Unexpected character.");
+        }
         break;
     }
+  }
+
+  private void number() {
+    while (isDigit((peek()))) {
+      advance();
+    }
+
+    if (peek() == '.' && isDigit(peekNext())) {
+      advance();
+      while (isDigit(peek())) {
+        advance();
+      }
+    }
+
+    double value = Double.parseDouble(source.substring(start, current));
+    addToken(NUMBER, value);
+  }
+
+  private boolean isDigit(char c) {
+    return c >= '0' && c <= '9';
+  }
+
+  private void string() {
+    while (peek() != '"' && !isAtEnd()) {
+      if (peek() == '\n') {
+        line++;
+      }
+      advance();
+    }
+
+    if (isAtEnd()) {
+      Lox.error(line, "Unterminated string.");
+      return;
+    }
+
+    advance();
+
+    String value = source.substring(start + 1, current - 1);
+    addToken(STRING, value);
   }
 
   private boolean match(char expected) {
@@ -131,6 +180,13 @@ final class Scanner {
       return '\0';
     }
     return source.charAt(current);
+  }
+
+  private char peekNext() {
+    if (current + 1 >= source.length()) {
+      return '\0';
+    }
+    return source.charAt(current + 1);
   }
 
   private char advance() {
