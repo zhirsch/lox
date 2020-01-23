@@ -9,6 +9,10 @@ import static com.zacharyhirsch.lox.TokenType.GREATER;
 import static com.zacharyhirsch.lox.TokenType.GREATER_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.LESS;
 import static com.zacharyhirsch.lox.TokenType.LESS_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.MINUS;
+import static com.zacharyhirsch.lox.TokenType.PLUS;
+import static com.zacharyhirsch.lox.TokenType.SLASH;
+import static com.zacharyhirsch.lox.TokenType.STAR;
 
 final class Parser {
 
@@ -39,6 +43,26 @@ final class Parser {
     while (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
       Token operator = previous();
       Expr right = addition();
+      expr = new Expr.Binary(expr, operator, right);
+    }
+    return expr;
+  }
+
+  private Expr addition() {
+    Expr expr = multiplication();
+    while (match(MINUS, PLUS)) {
+      Token operator = previous();
+      Expr right = multiplication();
+      expr = new Expr.Binary(expr, operator, right);
+    }
+    return expr;
+  }
+
+  private Expr multiplication() {
+    Expr expr = unary();
+    while (match(SLASH, STAR)) {
+      Token operator = previous();
+      Expr right = unary();
       expr = new Expr.Binary(expr, operator, right);
     }
     return expr;
