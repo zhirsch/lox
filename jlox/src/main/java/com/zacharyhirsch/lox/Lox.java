@@ -37,9 +37,13 @@ final class Lox {
   }
 
   private static void run(String source) {
-    for (Token token : new Scanner(source).scanTokens()) {
-      System.out.println(token);
+    Scanner scanner = new Scanner(source);
+    Parser parser = new Parser(scanner.scanTokens());
+    Expr expression = parser.parse();
+    if (hadError) {
+      return;
     }
+    System.out.println(new AstPrinter().print(expression));
   }
 
   static void error(int line, String message) {
