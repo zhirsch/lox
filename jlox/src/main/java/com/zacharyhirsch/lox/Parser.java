@@ -2,6 +2,7 @@ package com.zacharyhirsch.lox;
 
 import java.util.List;
 
+import static com.zacharyhirsch.lox.TokenType.BANG;
 import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.EOF;
 import static com.zacharyhirsch.lox.TokenType.EQUAL_EQUAL;
@@ -66,6 +67,15 @@ final class Parser {
       expr = new Expr.Binary(expr, operator, right);
     }
     return expr;
+  }
+
+  private Expr unary() {
+    if (match(BANG, MINUS)) {
+      Token operator = previous();
+      Expr right = unary();
+      return new Expr.Unary(operator, right);
+    }
+    return primary();
   }
 
   private boolean match(TokenType... types) {
