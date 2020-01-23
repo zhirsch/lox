@@ -105,6 +105,13 @@ final class Parser {
     }
   }
 
+  private Token consume(TokenType type, String message) {
+    if (check(type)) {
+      return advance();
+    }
+    throw error(peek(), message);
+  }
+
   private boolean match(TokenType... types) {
     for (TokenType type : types) {
       if (check(type)) {
