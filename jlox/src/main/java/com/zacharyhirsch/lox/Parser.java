@@ -45,4 +45,11 @@ final class Parser {
     }
     return peek().type == type;
   }
+
+  private Token advance() {
+    if (!isAtEnd()) {
+      current++;
+    }
+    return previous();
+  }
 }
