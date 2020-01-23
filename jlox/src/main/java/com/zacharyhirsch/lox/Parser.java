@@ -6,14 +6,21 @@ import static com.zacharyhirsch.lox.TokenType.BANG;
 import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.EOF;
 import static com.zacharyhirsch.lox.TokenType.EQUAL_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.FALSE;
 import static com.zacharyhirsch.lox.TokenType.GREATER;
 import static com.zacharyhirsch.lox.TokenType.GREATER_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.LEFT_PAREN;
 import static com.zacharyhirsch.lox.TokenType.LESS;
 import static com.zacharyhirsch.lox.TokenType.LESS_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.MINUS;
+import static com.zacharyhirsch.lox.TokenType.NIL;
+import static com.zacharyhirsch.lox.TokenType.NUMBER;
 import static com.zacharyhirsch.lox.TokenType.PLUS;
+import static com.zacharyhirsch.lox.TokenType.RIGHT_PAREN;
 import static com.zacharyhirsch.lox.TokenType.SLASH;
 import static com.zacharyhirsch.lox.TokenType.STAR;
+import static com.zacharyhirsch.lox.TokenType.STRING;
+import static com.zacharyhirsch.lox.TokenType.TRUE;
 
 final class Parser {
 
@@ -76,6 +83,26 @@ final class Parser {
       return new Expr.Unary(operator, right);
     }
     return primary();
+  }
+
+  private Expr primary() {
+    if (match(FALSE)) {
+      return new Expr.Literal(false);
+    }
+    if (match(TRUE)) {
+      return new Expr.Literal(true);
+    }
+    if (match(NIL)) {
+      return new Expr.Literal(null);
+    }
+    if (match(NUMBER, STRING)) {
+      return new Expr.Literal(previous().literal);
+    }
+    if (match(LEFT_PAREN)) {
+      Expr expr = expression();
+      consume(RIGHT_PAREN, "Expect ')' after expression.");
+      return new Expr.Grouping(expr);
+    }
   }
 
   private boolean match(TokenType... types) {
