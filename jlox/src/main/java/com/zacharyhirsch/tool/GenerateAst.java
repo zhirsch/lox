@@ -21,7 +21,8 @@ public class GenerateAst {
             "Binary   : Expr left, Token operator, Expr right",
             "Grouping : Expr expression",
             "Literal  : Object value",
-            "Unary    : Token operator, Expr right"));
+            "Unary    : Token operator, Expr right",
+            "Ternary  : Expr predicate, Expr t, Expr f"));
   }
 
   private static void defineAst(String outputDir, String baseName, List<String> types)
