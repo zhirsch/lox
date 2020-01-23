@@ -13,6 +13,7 @@ enum TokenType {
     SLASH,
     STAR,
     QUESTION,
+    COLON,
 
     BANG,
     BANG_EQUAL,

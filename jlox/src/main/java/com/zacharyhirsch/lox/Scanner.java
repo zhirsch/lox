@@ -9,6 +9,7 @@ import static com.zacharyhirsch.lox.TokenType.AND;
 import static com.zacharyhirsch.lox.TokenType.BANG;
 import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.CLASS;
+import static com.zacharyhirsch.lox.TokenType.COLON;
 import static com.zacharyhirsch.lox.TokenType.COMMA;
 import static com.zacharyhirsch.lox.TokenType.DOT;
 import static com.zacharyhirsch.lox.TokenType.ELSE;
@@ -126,6 +127,9 @@ final class Scanner {
         break;
       case '?':
         addToken(QUESTION);
+        break;
+      case ':':
+        addToken(COLON);
         break;
       case '!':
         addToken(match('=') ? BANG_EQUAL : BANG);
