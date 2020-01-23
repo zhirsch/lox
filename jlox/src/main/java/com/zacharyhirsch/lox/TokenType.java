@@ -12,6 +12,7 @@ enum TokenType {
     SEMICOLON,
     SLASH,
     STAR,
+    QUESTION,
 
     BANG,
     BANG_EQUAL,

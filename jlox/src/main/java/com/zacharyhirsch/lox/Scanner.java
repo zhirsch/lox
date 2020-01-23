@@ -32,6 +32,7 @@ import static com.zacharyhirsch.lox.TokenType.NUMBER;
 import static com.zacharyhirsch.lox.TokenType.OR;
 import static com.zacharyhirsch.lox.TokenType.PLUS;
 import static com.zacharyhirsch.lox.TokenType.PRINT;
+import static com.zacharyhirsch.lox.TokenType.QUESTION;
 import static com.zacharyhirsch.lox.TokenType.RETURN;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_BRACE;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_PAREN;
@@ -122,6 +123,9 @@ final class Scanner {
         break;
       case '*':
         addToken(STAR);
+        break;
+      case '?':
+        addToken(QUESTION);
         break;
       case '!':
         addToken(match('=') ? BANG_EQUAL : BANG);
