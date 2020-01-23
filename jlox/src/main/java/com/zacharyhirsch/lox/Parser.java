@@ -35,6 +35,14 @@ final class Parser {
     this.current = 0;
   }
 
+  Expr parse() {
+    try {
+      return expression();
+    } catch (ParseError error) {
+      return null;
+    }
+  }
+
   private Expr expression() {
     return equality();
   }
