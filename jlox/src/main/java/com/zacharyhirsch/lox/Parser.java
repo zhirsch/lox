@@ -5,6 +5,10 @@ import java.util.List;
 import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.EOF;
 import static com.zacharyhirsch.lox.TokenType.EQUAL_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.GREATER;
+import static com.zacharyhirsch.lox.TokenType.GREATER_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.LESS;
+import static com.zacharyhirsch.lox.TokenType.LESS_EQUAL;
 
 final class Parser {
 
@@ -25,6 +29,16 @@ final class Parser {
     while (match(BANG_EQUAL, EQUAL_EQUAL)) {
       Token operator = previous();
       Expr right = comparison();
+      expr = new Expr.Binary(expr, operator, right);
+    }
+    return expr;
+  }
+
+  private Expr comparison() {
+    Expr expr = addition();
+    while (match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)) {
+      Token operator = previous();
+      Expr right = addition();
       expr = new Expr.Binary(expr, operator, right);
     }
     return expr;
