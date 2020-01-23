@@ -112,6 +112,11 @@ final class Parser {
     throw error(peek(), message);
   }
 
+  private ParseError error(Token token, String message) {
+    Lox.error(token, message);
+    return new ParseError();
+  }
+
   private boolean match(TokenType... types) {
     for (TokenType type : types) {
       if (check(type)) {
