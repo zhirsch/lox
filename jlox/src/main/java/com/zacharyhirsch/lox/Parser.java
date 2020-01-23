@@ -17,6 +17,7 @@ import static com.zacharyhirsch.lox.TokenType.NIL;
 import static com.zacharyhirsch.lox.TokenType.NUMBER;
 import static com.zacharyhirsch.lox.TokenType.PLUS;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_PAREN;
+import static com.zacharyhirsch.lox.TokenType.SEMICOLON;
 import static com.zacharyhirsch.lox.TokenType.SLASH;
 import static com.zacharyhirsch.lox.TokenType.STAR;
 import static com.zacharyhirsch.lox.TokenType.STRING;
@@ -117,6 +118,27 @@ final class Parser {
   private ParseError error(Token token, String message) {
     Lox.error(token, message);
     return new ParseError();
+  }
+
+  private void synchronize() {
+    advance();
+    while (!isAtEnd()) {
+      if (previous().type == SEMICOLON) {
+        return;
+      }
+      switch (peek().type) {
+        case CLASS:
+        case FUN:
+        case VAR:
+        case FOR:
+        case IF:
+        case WHILE:
+        case PRINT:
+        case RETURN:
+          return;
+      }
+      advance();
+    }
   }
 
   private boolean match(TokenType... types) {
