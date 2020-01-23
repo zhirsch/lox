@@ -38,4 +38,11 @@ final class Parser {
     }
     return false;
   }
+
+  private boolean check(TokenType type) {
+    if (isAtEnd()) {
+      return false;
+    }
+    return peek().type == type;
+  }
 }
