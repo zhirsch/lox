@@ -2,7 +2,7 @@ package com.zacharyhirsch.lox;
 
 final class Token {
 
-    private final TokenType type;
+    final TokenType type;
     final String lexeme;
     private final Object literal;
     private final int line;

@@ -3,6 +3,7 @@ package com.zacharyhirsch.lox;
 import java.util.List;
 
 import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.EOF;
 import static com.zacharyhirsch.lox.TokenType.EQUAL_EQUAL;
 
 final class Parser {
@@ -51,5 +52,17 @@ final class Parser {
       current++;
     }
     return previous();
+  }
+
+  private boolean isAtEnd() {
+    return peek().type == EOF;
+  }
+
+  private Token peek() {
+    return tokens.get(current);
+  }
+
+  private Token previous() {
+    return tokens.get(current - 1);
   }
 }
