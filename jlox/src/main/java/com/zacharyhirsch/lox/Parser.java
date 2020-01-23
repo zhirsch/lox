@@ -11,4 +11,8 @@ final class Parser {
     this.tokens = tokens;
     this.current = 0;
   }
+
+  private Expr expression() {
+    return equality();
+  }
 }
