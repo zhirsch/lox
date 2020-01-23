@@ -24,6 +24,8 @@ import static com.zacharyhirsch.lox.TokenType.TRUE;
 
 final class Parser {
 
+  private static final class ParseError extends RuntimeException {}
+
   private final List<Token> tokens;
   private int current;
 
