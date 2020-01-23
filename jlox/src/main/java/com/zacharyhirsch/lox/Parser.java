@@ -4,6 +4,7 @@ import java.util.List;
 
 import static com.zacharyhirsch.lox.TokenType.BANG;
 import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.COLON;
 import static com.zacharyhirsch.lox.TokenType.COMMA;
 import static com.zacharyhirsch.lox.TokenType.EOF;
 import static com.zacharyhirsch.lox.TokenType.EQUAL_EQUAL;
@@ -17,6 +18,7 @@ import static com.zacharyhirsch.lox.TokenType.MINUS;
 import static com.zacharyhirsch.lox.TokenType.NIL;
 import static com.zacharyhirsch.lox.TokenType.NUMBER;
 import static com.zacharyhirsch.lox.TokenType.PLUS;
+import static com.zacharyhirsch.lox.TokenType.QUESTION;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_PAREN;
 import static com.zacharyhirsch.lox.TokenType.SEMICOLON;
 import static com.zacharyhirsch.lox.TokenType.SLASH;
@@ -49,11 +51,22 @@ final class Parser {
   }
 
   private Expr compound() {
-    Expr expr = equality();
+    Expr expr = ternary();
     while (match(COMMA)) {
       Token operator = previous();
-      Expr right = equality();
+      Expr right = ternary();
       expr = new Expr.Binary(expr, operator, right);
+    }
+    return expr;
+  }
+
+  private Expr ternary() {
+    Expr expr = equality();
+    if (match(QUESTION)) {
+      Expr t = expression();
+      consume(COLON, "Expect ':' after expression.");
+      Expr f = expression();
+      expr = new Expr.Ternary(expr, t, f);
     }
     return expr;
   }
