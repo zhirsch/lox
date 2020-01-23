@@ -4,6 +4,7 @@ import java.util.List;
 
 import static com.zacharyhirsch.lox.TokenType.BANG;
 import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.COMMA;
 import static com.zacharyhirsch.lox.TokenType.EOF;
 import static com.zacharyhirsch.lox.TokenType.EQUAL_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.FALSE;
@@ -44,7 +45,17 @@ final class Parser {
   }
 
   private Expr expression() {
-    return equality();
+    return compound();
+  }
+
+  private Expr compound() {
+    Expr expr = equality();
+    while (match(COMMA)) {
+      Token operator = previous();
+      Expr right = equality();
+      expr = new Expr.Binary(expr, operator, right);
+    }
+    return expr;
   }
 
   private Expr equality() {
