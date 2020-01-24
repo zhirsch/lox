@@ -32,13 +32,13 @@ public class Interpreter implements Expr.Visitor<Object> {
         }
         break;
       case GREATER:
-        return (double)left > (double)right;
+        return (double) left > (double) right;
       case GREATER_EQUAL:
-        return (double)left >= (double)right;
+        return (double) left >= (double) right;
       case LESS:
-        return (double)left < (double)right;
+        return (double) left < (double) right;
       case LESS_EQUAL:
-        return (double)left <= (double)right;
+        return (double) left <= (double) right;
       case BANG_EQUAL:
         return !isEqual(left, right);
       case EQUAL_EQUAL:
@@ -67,6 +67,16 @@ public class Interpreter implements Expr.Visitor<Object> {
       return (boolean) object;
     }
     return true;
+  }
+
+  private boolean isEqual(Object a, Object b) {
+    if (a == null && b == null) {
+      return true;
+    }
+    if (a == null) {
+      return false;
+    }
+    return a.equals(b);
   }
 
   private Object evaluate(Expr expr) {
