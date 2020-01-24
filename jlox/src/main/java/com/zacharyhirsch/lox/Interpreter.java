@@ -39,6 +39,10 @@ public class Interpreter implements Expr.Visitor<Object> {
         return (double)left < (double)right;
       case LESS_EQUAL:
         return (double)left <= (double)right;
+      case BANG_EQUAL:
+        return !isEqual(left, right);
+      case EQUAL_EQUAL:
+        return isEqual(left, right);
     }
     return null;
   }
