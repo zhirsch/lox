@@ -17,11 +17,21 @@ public class Interpreter implements Expr.Visitor<Object> {
     Object right = evaluate(expr.right);
     switch (expr.operator.type) {
       case BANG:
-        return !isTruth(right);
+        return !isTruthy(right);
       case MINUS:
         return -(double) right;
     }
     return null;
+  }
+
+  private boolean isTruthy(Object object) {
+    if (object == null) {
+      return false;
+    }
+    if (object instanceof Boolean) {
+      return (boolean) object;
+    }
+    return true;
   }
 
   private Object evaluate(Expr expr) {
