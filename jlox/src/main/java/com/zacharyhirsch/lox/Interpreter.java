@@ -59,6 +59,11 @@ public class Interpreter implements Expr.Visitor<Object> {
     return null;
   }
 
+  @Override
+  public Object visitTernaryExpr(Expr.Ternary expr) {
+    return isTruthy(evaluate(expr.predicate)) ? evaluate(expr.t) : evaluate(expr.f);
+  }
+
   private boolean isTruthy(Object object) {
     if (object == null) {
       return false;
