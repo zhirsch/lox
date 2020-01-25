@@ -23,6 +23,10 @@ public class GenerateAst {
             "Literal  : Object value",
             "Unary    : Token operator, Expr right",
             "Ternary  : Expr predicate, Expr t, Expr f"));
+    defineAst(
+        outputDir,
+        "Stmt",
+        Arrays.asList("Expression : Expr expression", "Print      : Expr expression"));
   }
 
   private static void defineAst(String outputDir, String baseName, List<String> types)
@@ -57,7 +61,15 @@ public class GenerateAst {
 
     for (String type : types) {
       String typeName = type.split(":")[0].trim();
-      writer.println("    R visit" + typeName + baseName + "(" + typeName + " " + baseName.toLowerCase() + ");");
+      writer.println(
+          "    R visit"
+              + typeName
+              + baseName
+              + "("
+              + typeName
+              + " "
+              + baseName.toLowerCase()
+              + ");");
     }
 
     writer.println("  }");
