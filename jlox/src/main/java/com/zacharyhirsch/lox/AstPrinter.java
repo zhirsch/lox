@@ -1,5 +1,7 @@
 package com.zacharyhirsch.lox;
 
+import com.zacharyhirsch.lox.Expr.Variable;
+
 final class AstPrinter implements Expr.Visitor<String> {
 
   String print(Expr expr) {
@@ -32,6 +34,11 @@ final class AstPrinter implements Expr.Visitor<String> {
   @Override
   public String visitTernaryExpr(Expr.Ternary expr) {
     return parenthesize("?", expr.predicate, expr.t, expr.f);
+  }
+
+  @Override
+  public String visitVariableExpr(Variable expr) {
+    return parenthesize(expr.name.lexeme);
   }
 
   private String parenthesize(String name, Expr... exprs) {
