@@ -5,10 +5,12 @@ import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.COLON;
 import static com.zacharyhirsch.lox.TokenType.COMMA;
 import static com.zacharyhirsch.lox.TokenType.EOF;
+import static com.zacharyhirsch.lox.TokenType.EQUAL;
 import static com.zacharyhirsch.lox.TokenType.EQUAL_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.FALSE;
 import static com.zacharyhirsch.lox.TokenType.GREATER;
 import static com.zacharyhirsch.lox.TokenType.GREATER_EQUAL;
+import static com.zacharyhirsch.lox.TokenType.IDENTIFIER;
 import static com.zacharyhirsch.lox.TokenType.LEFT_PAREN;
 import static com.zacharyhirsch.lox.TokenType.LESS;
 import static com.zacharyhirsch.lox.TokenType.LESS_EQUAL;
@@ -24,6 +26,7 @@ import static com.zacharyhirsch.lox.TokenType.SLASH;
 import static com.zacharyhirsch.lox.TokenType.STAR;
 import static com.zacharyhirsch.lox.TokenType.STRING;
 import static com.zacharyhirsch.lox.TokenType.TRUE;
+import static com.zacharyhirsch.lox.TokenType.VAR;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +46,31 @@ final class Parser {
   List<Stmt> parse() {
     List<Stmt> statements = new ArrayList<>();
     while (!isAtEnd()) {
-      statements.add(statement());
+      statements.add(declaration());
     }
     return statements;
+  }
+
+  private Stmt declaration() {
+    try {
+      if (match(VAR)) {
+        return varDeclaration();
+      }
+      return statement();
+    } catch (ParseError error) {
+      synchronize();
+      return null;
+    }
+  }
+
+  private Stmt varDeclaration() {
+    Token name = consume(IDENTIFIER, "Expect variable name.");
+    Expr initializer = null;
+    if (match(EQUAL)) {
+      initializer = expression();
+    }
+    consume(SEMICOLON, "Expect ';' after variable declaration.");
+    return new Stmt.Var(name, initializer);
   }
 
   private Expr expression() {
@@ -153,6 +178,9 @@ final class Parser {
     }
     if (match(NUMBER, STRING)) {
       return new Expr.Literal(previous().literal);
+    }
+    if (match(IDENTIFIER)) {
+      return new Expr.Variable(previous());
     }
     if (match(LEFT_PAREN)) {
       Expr expr = expression();
