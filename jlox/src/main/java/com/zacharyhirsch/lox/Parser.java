@@ -74,7 +74,7 @@ final class Parser {
   }
 
   private Expr expression() {
-    return compound();
+    return assignment();
   }
 
   private Stmt statement() {
@@ -94,6 +94,20 @@ final class Parser {
     Expr expr = expression();
     consume(SEMICOLON, "Expected ';' after expression.");
     return new Stmt.Expression(expr);
+  }
+
+  private Expr assignment() {
+    Expr expr = compound();
+    if (match(EQUAL)) {
+      Token equals = previous();
+      Expr value = assignment();
+      if (expr instanceof Expr.Variable) {
+        Token name = ((Expr.Variable)expr).name;
+        return new Expr.Assign(name, value);
+      }
+      error(equals, "Invalid assignment target.");
+    }
+    return expr;
   }
 
   private Expr compound() {
