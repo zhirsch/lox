@@ -1,11 +1,12 @@
 package com.zacharyhirsch.lox;
 
+import static com.zacharyhirsch.lox.LineReadingIterator.readLines;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import static com.zacharyhirsch.lox.LineReadingIterator.readLines;
+import java.util.List;
 
 final class Lox {
 
@@ -46,11 +47,11 @@ final class Lox {
   private static void run(String source) {
     Scanner scanner = new Scanner(source);
     Parser parser = new Parser(scanner.scanTokens());
-    Expr expression = parser.parse();
+    List<Stmt> statements = parser.parse();
     if (hadError) {
       return;
     }
-    interpreter.interpret(expression);
+    interpreter.interpret(statements);
   }
 
   static void error(int line, String message) {
