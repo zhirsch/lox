@@ -1,7 +1,5 @@
 package com.zacharyhirsch.lox;
 
-import java.util.List;
-
 import static com.zacharyhirsch.lox.TokenType.BANG;
 import static com.zacharyhirsch.lox.TokenType.BANG_EQUAL;
 import static com.zacharyhirsch.lox.TokenType.COLON;
@@ -18,6 +16,7 @@ import static com.zacharyhirsch.lox.TokenType.MINUS;
 import static com.zacharyhirsch.lox.TokenType.NIL;
 import static com.zacharyhirsch.lox.TokenType.NUMBER;
 import static com.zacharyhirsch.lox.TokenType.PLUS;
+import static com.zacharyhirsch.lox.TokenType.PRINT;
 import static com.zacharyhirsch.lox.TokenType.QUESTION;
 import static com.zacharyhirsch.lox.TokenType.RIGHT_PAREN;
 import static com.zacharyhirsch.lox.TokenType.SEMICOLON;
@@ -25,6 +24,9 @@ import static com.zacharyhirsch.lox.TokenType.SLASH;
 import static com.zacharyhirsch.lox.TokenType.STAR;
 import static com.zacharyhirsch.lox.TokenType.STRING;
 import static com.zacharyhirsch.lox.TokenType.TRUE;
+
+import java.util.ArrayList;
+import java.util.List;
 
 final class Parser {
 
@@ -38,16 +40,35 @@ final class Parser {
     this.current = 0;
   }
 
-  Expr parse() {
-    try {
-      return expression();
-    } catch (ParseError error) {
-      return null;
+  List<Stmt> parse() {
+    List<Stmt> statements = new ArrayList<>();
+    while (!isAtEnd()) {
+      statements.add(statement());
     }
+    return statements;
   }
 
   private Expr expression() {
     return compound();
+  }
+
+  private Stmt statement() {
+    if (match(PRINT)) {
+      return printStatement();
+    }
+    return expressionStatement();
+  }
+
+  private Stmt printStatement() {
+    Expr value = expression();
+    consume(SEMICOLON, "Expected ';' after value.");
+    return new Stmt.Print(value);
+  }
+
+  private Stmt expressionStatement() {
+    Expr expr = expression();
+    consume(SEMICOLON, "Expected ';' after expression.");
+    return new Stmt.Expression(expr);
   }
 
   private Expr compound() {
